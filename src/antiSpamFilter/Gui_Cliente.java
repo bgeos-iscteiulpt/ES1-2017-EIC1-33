@@ -16,10 +16,13 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.WindowConstants;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+
 
 public class Gui_Cliente {
-	
 	private JFrame frame;
 	private JPanel panelup;
 	private JPanel panelcenter;
@@ -41,10 +44,10 @@ public class Gui_Cliente {
 	private JLabel text1;
 	private JLabel text2;
 	private JLabel text3;
-	private JLabel FP1 = new JLabel("FP: ");
-	private JLabel FN1 = new JLabel("FN: ");
-	private JLabel FP2 = new JLabel("FP: ");
-	private JLabel FN2 = new JLabel("FN: ");
+	private JTextPane FP1 = new JTextPane();
+	private JTextPane FN1 = new JTextPane();
+	private JTextPane FP2 = new JTextPane();
+	private JTextPane FN2 = new JTextPane();
 	private DefaultListModel<String> model1 = new DefaultListModel<>();
 	private DefaultListModel<String> model3 = new DefaultListModel<>();
 	private JButton avaliar;
@@ -53,6 +56,7 @@ public class Gui_Cliente {
 	private JButton gravarconfauto;
 	private static ArrayList<String> lrules = new ArrayList<String>();
 	private ReadFiles r;
+	private Manual_Configuration mc;
 	
 	public Gui_Cliente() {
 		frame = new JFrame("Filter Spam");
@@ -125,6 +129,13 @@ public class Gui_Cliente {
 		}
 		
 		boxrightmanual = new JTextArea();
+		int[] valores_manual = new int[335];
+		for (int i=0;i>335;i++){
+			valores_manual[i]=mc.getValores()[i];
+		}
+		for(int i=0; i<335; i++){
+			boxrightmanual.append(i + "->"+valores_manual[i]+"\n");
+		}
 		boxrightmanual.setEditable(true);
 		
 		scroll1 = new JScrollPane(boxleftmanual);
@@ -136,6 +147,7 @@ public class Gui_Cliente {
 		JPanel panelright1 = new JPanel();
 		panelright1.setLayout(new BoxLayout(panelright1, 1));
 		avaliar = new JButton("Avaliar Configuração");
+		avaliar.addActionListener(new AvaliarManual(this));
 		gravarconfmanual = new JButton("Gravar Configuração");
 		avaliar.setPreferredSize(new Dimension (200, 40));
 		gravarconfmanual.setPreferredSize(new Dimension (200, 40));
@@ -143,10 +155,17 @@ public class Gui_Cliente {
 		panelright1.add(avaliar);
 		panelright1.add(Box.createRigidArea(new Dimension(60,50)));
 		panelright1.add(gravarconfmanual);
+		gravarconfmanual.addActionListener( new GravarManual(this));
+		
+		
 		
 		panelright1.add(Box.createRigidArea(new Dimension(0,20)));
+		FP1.setText("FP :");
+		FP1.setEditable(false);
 		panelright1.add(FP1);
 		panelright1.add(Box.createRigidArea(new Dimension(0,10)));
+		FN1.setText("FN :");
+		FN1.setEditable(false);
 		panelright1.add(FN1);
 		
 		
@@ -182,8 +201,12 @@ public class Gui_Cliente {
 		panelright.add(gravarconfauto);
 		
 		panelright.add(Box.createRigidArea(new Dimension(0,20)));
+		FP2.setText("FP :");
+		FP2.setEditable(false);
 		panelright.add(FP2);
 		panelright.add(Box.createRigidArea(new Dimension(0,10)));
+		FN2.setText("FN :");
+		FN2.setEditable(false);
 		panelright.add(FN2);
 		
 		paneldown.add(panelleftup);
@@ -195,6 +218,44 @@ public class Gui_Cliente {
 	}
 
 
+
+	public JTextArea getBoxrightmanual() {
+		return boxrightmanual;
+	}
+
+
+
+	public JTextPane getFP1() {
+		return FP1;
+	}
+
+	public void setFP1(JTextPane fP1) {
+		FP1 = fP1;
+	}
+
+	public JTextPane getFN1() {
+		return FN1;
+	}
+
+	public void setFN1(JTextPane fN1) {
+		FN1 = fN1;
+	}
+
+	public JTextPane getFP2() {
+		return FP2;
+	}
+
+	public void setFP2(JTextPane fP2) {
+		FP2 = fP2;
+	}
+
+	public JTextPane getFN2() {
+		return FN2;
+	}
+
+	public void setFN2(JTextPane fN2) {
+		FN2 = fN2;
+	}
 
 	public static void main(String[] args) {
 		ReadFiles.lerFicheiros();
